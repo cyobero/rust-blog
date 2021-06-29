@@ -1,3 +1,5 @@
+use rust_blog::handlers::*;
+
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use r2d2::Pool;
 use r2d2_mysql::mysql::{Opts, OptsBuilder};
@@ -20,8 +22,14 @@ async fn main() -> std::io::Result<()> {
         .build(manager)
         .expect("Failed to create pool.\n");
 
-    HttpServer::new(|| App::new().service(index))
-        .bind("0.0.0.0:8080")?
-        .run()
-        .await
+    HttpServer::new(|| {
+        App::new()
+            .service(index)
+            .service(get_users)
+            .service(get_user_by_id)
+            .service(create_user)
+    })
+    .bind("0.0.0.0:8080")?
+    .run()
+    .await
 }
