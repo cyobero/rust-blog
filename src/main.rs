@@ -1,6 +1,9 @@
 use rust_blog::handlers::*;
 
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use diesel::prelude::*;
+use diesel::ExpressionMethods;
+use dotenv::dotenv;
 use r2d2::Pool;
 use r2d2_mysql::mysql::{Opts, OptsBuilder};
 use r2d2_mysql::MysqlConnectionManager;
@@ -14,6 +17,7 @@ async fn index() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    dotenv().ok();
     let database_url = env::var("DATABASE_URL").unwrap();
     let opts = Opts::from_url(&database_url).unwrap();
     let builder = OptsBuilder::from_opts(opts);
