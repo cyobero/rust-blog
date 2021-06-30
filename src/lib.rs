@@ -1,3 +1,4 @@
+// lib.rs
 #[macro_use]
 extern crate diesel;
 
