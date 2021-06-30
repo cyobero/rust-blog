@@ -10,11 +10,12 @@ pub struct User {
     pub password: String,
 }
 
-#[derive(Insertable, Serialize)]
+/// Create new user.
+#[derive(Debug, Insertable, Deserialize)]
 #[table_name = "users"]
-pub struct NewUser<'a> {
-    pub username: &'a str,
-    pub password: &'a str,
+pub struct NewUser {
+    pub username: String,
+    pub password: String,
 }
 
 #[derive(Queryable)]

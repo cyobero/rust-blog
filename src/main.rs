@@ -1,14 +1,10 @@
 use rust_blog::handlers::*;
 
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
-use diesel::prelude::*;
-use diesel::ExpressionMethods;
+use actix_web::{get, App, HttpResponse, HttpServer, Responder};
 use dotenv::dotenv;
-use r2d2::Pool;
 use r2d2_mysql::mysql::{Opts, OptsBuilder};
 use r2d2_mysql::MysqlConnectionManager;
 use std::env;
-use std::sync::Arc;
 
 #[get("/")]
 async fn index() -> impl Responder {
@@ -26,8 +22,9 @@ async fn main() -> std::io::Result<()> {
         .build(manager)
         .expect("Failed to create pool.\n");
 
-    HttpServer::new(|| {
+    HttpServer::new(move || {
         App::new()
+            .data(pool.clone())
             .service(index)
             .service(get_users)
             .service(get_user_by_id)

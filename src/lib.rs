@@ -18,7 +18,7 @@ pub fn establish_connection() -> MysqlConnection {
         .expect(&format!("Error connecting to {}", database_url))
 }
 
-pub fn create_user(conn: &MysqlConnection, _username: &str, _password: &str) {
+pub fn create_user(conn: &MysqlConnection, _username: String, _password: String) {
     use schema::users::dsl::*;
 
     let new_user = NewUser {
@@ -44,6 +44,6 @@ mod tests {
         let _username = String::from("cyobero");
         let _password = String::from("password");
 
-        create_user(&connection, &_username, &_password);
+        create_user(&connection, _username, _password);
     }
 }

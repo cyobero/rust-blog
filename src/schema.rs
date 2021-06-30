@@ -1,5 +1,3 @@
-use diesel::ExpressionMethods;
-
 table! {
     posts (id) {
         id -> Int4,
