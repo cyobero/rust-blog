@@ -1,16 +1,16 @@
 table! {
     posts (id) {
-        id -> Int4,
+        id -> Integer,
         title -> Varchar,
         body -> Nullable<Text>,
         created_at -> Timestamp,
-        author_id -> Int4,
+        author_id -> Integer,
     }
 }
 
 table! {
     users (id) {
-        id -> Int4,
+        id -> Integer,
         username -> Varchar,
         password -> Varchar,
     }
@@ -18,4 +18,7 @@ table! {
 
 joinable!(posts -> users (author_id));
 
-allow_tables_to_appear_in_same_query!(posts, users,);
+allow_tables_to_appear_in_same_query!(
+    posts,
+    users,
+);

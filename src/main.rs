@@ -15,6 +15,7 @@ async fn index() -> impl Responder {
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
     let database_url = env::var("DATABASE_URL").unwrap();
+
     let opts = Opts::from_url(&database_url).unwrap();
     let builder = OptsBuilder::from_opts(opts);
     let manager = MysqlConnectionManager::new(builder);

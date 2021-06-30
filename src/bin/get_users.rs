@@ -9,8 +9,7 @@ use diesel::RunQueryDsl;
 fn main() {
     let connection = establish_connection();
 
-    let results: Result<User, _> = users::table.filter(users::id.eq(1)).first(&connection);
-    let user = results.unwrap();
-    println!("id: {}", user.id);
-    println!("username: {}", user.username);
+    let results: Vec<User> = users::table.get_results(&connection).unwrap();
+
+    results.into_iter().for_each(|user| println!("{:?}", user));
 }
