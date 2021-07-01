@@ -9,7 +9,6 @@ pub struct User {
     pub username: String,
     pub password: String,
 }
-
 /// Create new user.
 #[derive(Debug, Insertable, Deserialize)]
 #[table_name = "users"]

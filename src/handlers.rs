@@ -1,9 +1,16 @@
 use super::models::{NewUser, User};
-use actix_web::{get, post, web, HttpResponse, Responder};
+use actix_web::{get, post, web, HttpResponse, Responder, Result};
 use diesel::r2d2::ConnectionManager;
 use diesel::MysqlConnection;
+use serde::{Deserialize, Serialize};
 
 type DbPool = r2d2::Pool<ConnectionManager<MysqlConnection>>;
+
+#[derive(Serialize, Deserialize)]
+pub struct UserResponse {
+    id: i32,
+    username: String,
+}
 
 #[get("/users")]
 pub async fn get_users() -> impl Responder {
@@ -11,7 +18,10 @@ pub async fn get_users() -> impl Responder {
 }
 
 #[get("/users/{username}")]
-pub async fn get_user(pool: web::Data<DbPool>, username: web::Path<String>) -> impl Responder {
+pub async fn get_user(
+    pool: web::Data<DbPool>,
+    username: web::Path<String>,
+) -> Result<HttpResponse> {
     use super::get_user;
 
     let username = username.into_inner();
@@ -20,15 +30,17 @@ pub async fn get_user(pool: web::Data<DbPool>, username: web::Path<String>) -> i
         .get()
         .expect("Could not establish connection from DB pool.");
 
-    let user: User = web::block(move || get_user(&conn, &username))
+    let user = web::block(move || get_user(&conn, &username))
         .await
         .map_err(|e| {
             eprintln!("{}", e);
             HttpResponse::InternalServerError().finish()
-        })
-        .unwrap();
+        })?;
 
-    HttpResponse::Ok().json(user)
+    Ok(HttpResponse::Ok().json(UserResponse {
+        id: user.id,
+        username: user.username,
+    }))
 }
 
 #[post("/users")]
