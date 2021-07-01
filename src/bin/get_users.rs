@@ -2,8 +2,6 @@ use rust_blog::establish_connection;
 use rust_blog::models::User;
 use rust_blog::schema::users;
 
-use diesel::ExpressionMethods;
-use diesel::QueryDsl;
 use diesel::RunQueryDsl;
 
 fn main() {

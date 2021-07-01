@@ -63,14 +63,34 @@ pub fn create_post(
         body,
         author_id,
     };
-
     diesel::insert_into(posts::table)
         .values(&new_post)
         .execute(conn)
 }
 
+/// Get post by post id.
+pub fn get_post(conn: &MysqlConnection, post_id: i32) -> Result<Post, Error> {
+    use schema::posts;
+
+    posts::table.filter(posts::id.eq(post_id)).get_result(conn)
+}
+
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn post_retreived() {
+        use super::establish_connection;
+        use super::get_post;
+
+        let conn = establish_connection();
+
+        let post1 = get_post(&conn, 1);
+        let post2 = get_post(&conn, 2);
+
+        assert_eq!(post1.unwrap().id, 1);
+        assert_eq!(post2.unwrap().id, 2);
+    }
+
     #[test]
     fn post_created() {
         use super::create_post;
@@ -93,7 +113,7 @@ mod tests {
         let post2 = create_post(&conn, title, body, 17);
 
         assert_eq!(post1, Ok(1));
-        assert_eq!(post2, Ok(2));
+        assert_eq!(post2, Ok(1));
     }
 
     #[test]

@@ -70,9 +70,25 @@ pub async fn create_user(
     }
 }
 
+/// Handler for retreiving all posts from all users.
 #[get("/posts")]
-pub async fn get_post(pool: web::Data<DbPool>) -> Result<HttpResponse> {
+pub async fn get_posts(pool: web::Data<DbPool>) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok().body("Hello from get post!"))
+}
+
+/// Handler for retreiving a post by passing in a post ID.
+#[get("/posts/{post_id}")]
+pub async fn get_post(pool: web::Data<DbPool>, post_id: web::Path<i32>) -> Result<HttpResponse> {
+    unimplemented!()
+}
+
+/// Handler for retrieving all posts from a certain user.
+#[get("/posts/{user_id}")]
+pub async fn get_users_posts(
+    pool: web::Data<DbPool>,
+    user_id: web::Path<String>,
+) -> Result<HttpResponse> {
+    unimplemented!()
 }
 
 #[post("/posts")]

@@ -1,6 +1,6 @@
 use super::schema::*;
 
-use diesel::sql_types::Timestamp;
+use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Queryable, Deserialize, Serialize)]
@@ -17,12 +17,13 @@ pub struct NewUser {
     pub password: String,
 }
 
-#[derive(Queryable)]
+#[derive(Debug, Queryable)]
 pub struct Post {
     pub id: i32,
     pub title: String,
     pub body: String,
-    pub created_at: Timestamp,
+    pub created_at: NaiveDateTime,
+    pub author_id: i32,
 }
 
 #[derive(Debug, Insertable, Deserialize)]
