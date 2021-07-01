@@ -44,6 +44,25 @@ pub async fn get_user(
 }
 
 #[post("/users")]
-pub async fn create_user(pool: web::Data<DbPool>, new_user: web::Json<NewUser>) -> impl Responder {
-    HttpResponse::Ok().body("Hello from create user!")
+pub async fn create_user(
+    pool: web::Data<DbPool>,
+    new_user: web::Json<NewUser>,
+) -> Result<HttpResponse> {
+    use super::create_user;
+
+    let username = new_user.username.to_string();
+    let password = new_user.password.to_string();
+
+    let conn = pool
+        .get()
+        .expect("Could not establish connection from DB pool.");
+
+    let new_user = web::block(move || create_user(&conn, username, password))
+        .await
+        .map_err(|e| {
+            eprint!("{}", e);
+            HttpResponse::InternalServerError().finish()
+        })?;
+
+    Ok(HttpResponse::Ok().json(new_user))
 }

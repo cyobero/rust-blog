@@ -2,5 +2,6 @@
 A simple blog written entirely in Rust.
 
 TODO: 
-	- Get user by user id.
-	- Make username field in database unique.
+	- ~~Get user by user id~~.
+	- ~~Make username field in database unique~~.
+	- POST request to create new user.

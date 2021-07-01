@@ -24,7 +24,7 @@ pub fn establish_connection() -> MysqlConnection {
         .expect(&format!("Error connecting to {}", database_url))
 }
 
-/// Create a new user and insert new record into database.
+/// Create a new user by passing in username and password and insert new record into database.
 pub fn create_user(
     conn: &MysqlConnection,
     _username: String,

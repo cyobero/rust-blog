@@ -36,13 +36,14 @@ fn main() {
 
     println!("Creating user...\n");
 
-    create_user(&connection, username.to_string(), password.to_string());
+    let _ = create_user(&connection, username.to_string(), password.to_string()).unwrap();
 
     let user: User = users::table
         .filter(users::username.eq(username))
         .get_result(&connection)
         .unwrap();
 
-    print!("Created user: ");
-    println!("{:?}", user);
+    if username.eq(&user.username) {
+        println!("User {} successfully created!", username);
+    }
 }
