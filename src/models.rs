@@ -1,9 +1,9 @@
 use super::schema::*;
 
 use diesel::sql_types::Timestamp;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Queryable, Deserialize)]
+#[derive(Debug, Queryable, Deserialize, Serialize)]
 pub struct User {
     pub id: i32,
     pub username: String,

@@ -694,6 +694,7 @@ dependencies = [
  "byteorder",
  "diesel_derives",
  "mysqlclient-sys",
+ "r2d2",
  "url 1.7.2",
 ]
 

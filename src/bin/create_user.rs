@@ -1,5 +1,6 @@
 use rust_blog::create_user;
 use rust_blog::establish_connection;
+use rust_blog::models::User;
 use rust_blog::schema::users;
 
 use clap::{App, Arg};
@@ -37,9 +38,9 @@ fn main() {
 
     create_user(&connection, username.to_string(), password.to_string());
 
-    let user = users::table
+    let user: User = users::table
         .filter(users::username.eq(username))
-        .execute(&connection)
+        .get_result(&connection)
         .unwrap();
 
     print!("Created user: ");
