@@ -30,6 +30,8 @@ async fn main() -> std::io::Result<()> {
             .service(get_users)
             .service(get_user)
             .service(create_user)
+            .service(get_post)
+            .service(create_post)
     })
     .bind("0.0.0.0:8080")?
     .run()
