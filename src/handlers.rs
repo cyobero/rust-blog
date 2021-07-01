@@ -69,3 +69,13 @@ pub async fn create_user(
         _ => Ok(HttpResponse::Ok().body("whoops. something went wrong")),
     }
 }
+
+#[get("/posts")]
+pub async fn get_post(pool: web::Data<DbPool>) -> Result<HttpResponse> {
+    Ok(HttpResponse::Ok().body("Hello from get post!"))
+}
+
+#[post("/posts")]
+pub async fn create_post(pool: web::Data<DbPool>) -> Result<HttpResponse> {
+    Ok(HttpResponse::Ok().body("Hello from POST posts!"))
+}
