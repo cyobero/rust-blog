@@ -1,4 +1,4 @@
-use super::models::{NewUser, User};
+use super::models::NewUser;
 use actix_web::{get, post, web, HttpResponse, Responder, Result};
 use diesel::r2d2::ConnectionManager;
 use diesel::MysqlConnection;
