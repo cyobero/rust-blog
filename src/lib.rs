@@ -49,8 +49,53 @@ pub fn get_user(conn: &MysqlConnection, username: &str) -> Result<User, Error> {
         .get_result(conn)
 }
 
+/// Create new blog post.
+pub fn create_post(
+    conn: &MysqlConnection,
+    title: String,
+    body: String,
+    author_id: i32,
+) -> Result<usize, Error> {
+    use schema::posts;
+
+    let new_post = NewPost {
+        title,
+        body,
+        author_id,
+    };
+
+    diesel::insert_into(posts::table)
+        .values(&new_post)
+        .execute(conn)
+}
+
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn post_created() {
+        use super::create_post;
+        use super::establish_connection;
+
+        let conn = establish_connection();
+
+        let title = String::from("This is my favorite song.");
+        let body = String::from(
+            "You just don't know the words. But I still mess with you; you just
+            ain't never heard.",
+        );
+
+        // Author new post by user 'cyobero' (user id = 1).
+        let post1 = create_post(&conn, title, body, 1);
+        // Author new post by user 'ifcyipes' (user id = 17)
+        let title = String::from("it's maaahvel baybee!");
+        let body =
+            String::from("Oh, he go tthe mango Sentinel! This bitch is blue like candy, n***a!");
+        let post2 = create_post(&conn, title, body, 17);
+
+        assert_eq!(post1, Ok(1));
+        assert_eq!(post2, Ok(2));
+    }
+
     #[test]
     fn user_retreived() {
         use super::establish_connection;
