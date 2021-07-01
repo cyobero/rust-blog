@@ -64,5 +64,8 @@ pub async fn create_user(
             HttpResponse::InternalServerError().finish()
         })?;
 
-    Ok(HttpResponse::Ok().json(new_user))
+    match new_user {
+        1 => Ok(HttpResponse::Ok().body("New user successfully created!")),
+        _ => Ok(HttpResponse::Ok().body("whoops. something went wrong")),
+    }
 }
