@@ -75,6 +75,13 @@ pub fn get_post(conn: &MysqlConnection, post_id: i32) -> Result<Post, Error> {
     posts::table.filter(posts::id.eq(post_id)).get_result(conn)
 }
 
+/// Get all posts.
+pub fn get_posts(conn: &MysqlConnection) -> Result<Vec<Post>, Error> {
+    use schema::posts;
+
+    posts::table.get_results(conn)
+}
+
 #[cfg(test)]
 mod tests {
     #[test]

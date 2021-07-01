@@ -17,7 +17,7 @@ pub struct NewUser {
     pub password: String,
 }
 
-#[derive(Debug, Queryable)]
+#[derive(Debug, Queryable, Serialize, Deserialize)]
 pub struct Post {
     pub id: i32,
     pub title: String,

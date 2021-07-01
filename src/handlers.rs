@@ -1,4 +1,4 @@
-use super::models::NewUser;
+use super::models::*;
 use actix_web::{get, post, web, HttpResponse, Responder, Result};
 use diesel::r2d2::ConnectionManager;
 use diesel::MysqlConnection;
@@ -55,7 +55,7 @@ pub async fn create_user(
 
     let conn = pool
         .get()
-        .expect("Could not establish connection from DB pool.");
+        .expect("Could not establish connection to DB pool.");
 
     let new_user = web::block(move || create_user(&conn, username, password))
         .await
@@ -70,16 +70,39 @@ pub async fn create_user(
     }
 }
 
-/// Handler for retreiving all posts from all users.
+/// Handler for retreiving all posts from all users (do we really wanna do that tho?).
 #[get("/posts")]
 pub async fn get_posts(pool: web::Data<DbPool>) -> Result<HttpResponse> {
-    Ok(HttpResponse::Ok().body("Hello from get post!"))
+    use super::get_posts;
+    let conn = pool
+        .get()
+        .expect("Could not establish connection to DB pool.");
+
+    let posts = web::block(move || get_posts(&conn)).await.map_err(|e| {
+        eprintln!("{}", e);
+        HttpResponse::InternalServerError().finish()
+    })?;
+
+    Ok(HttpResponse::Ok().body(format!("{:?}", posts)))
 }
 
 /// Handler for retreiving a post by passing in a post ID.
 #[get("/posts/{post_id}")]
-pub async fn get_post(pool: web::Data<DbPool>, post_id: web::Path<i32>) -> Result<HttpResponse> {
-    unimplemented!()
+pub async fn get_post(pool: web::Data<DbPool>, post: web::Path<Post>) -> Result<HttpResponse> {
+    use super::get_post;
+
+    let conn = pool
+        .get()
+        .expect("Could not establish connection to DB pool.");
+
+    let post = web::block(move || get_post(&conn, post.id))
+        .await
+        .map_err(|e| {
+            eprintln!("{}", e);
+            HttpResponse::InternalServerError().finish()
+        })?;
+
+    Ok(HttpResponse::Ok().json(&post))
 }
 
 /// Handler for retrieving all posts from a certain user.
